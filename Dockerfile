@@ -15,10 +15,13 @@ RUN yum -y install \
   vim \
   zlib-devel
 
-RUN git clone --recursive https://github.com/apache/mesos.git /src/mesos --branch 1.8.1
+ARG MESOS_GIT=https://github.com/apache/mesos.git
+ARG MESOS_VERSION=1.8.1
+
+RUN git clone --recursive ${MESOS_GIT} /src/mesos --branch ${MESOS_VERSION}
 
 RUN mkdir /src/mesos/build
 WORKDIR /src/mesos/build
 
 RUN cmake3 ..
-RUN make -j4
+RUN make
