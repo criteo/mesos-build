@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -e -x
+
 if [ -z "${BUILD_TYPE}" ]; then
   echo BUILD_TYPE must be defined
   exit 2
@@ -40,6 +42,8 @@ export MESOS_GIT=https://github.com/${GITHUB_REPO}.git
 MESOS_VERSIONS="$(echo "$TAGS" | jq '.[].name' -r | sort -h | grep -E "^([0-9]{1,}\.)+[0-9]{1,}")"
 DOCKER_TAGS_URL="https://hub.docker.com/v2/repositories/${DOCKER_REPO}/tags?page_size=1000"
 DOCKER_TAGS="$(curl "${DOCKER_TAGS_URL}" | jq -r '.results|.[]|.name')"
+
+set +e
 
 for MESOS_VERSION in $MESOS_VERSIONS; do
   echo "Checking mesos version: ${MESOS_VERSION}"
