@@ -53,3 +53,6 @@ RUN ./configure \
      --enable-xfs-disk-isolator
 
 RUN make -j "$(nproc)"
+
+ENV MESOS_ROOT_DIR=/src/mesos
+ENV MESOS_BUILD_DIR=/src/mesos

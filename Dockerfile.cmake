@@ -32,3 +32,6 @@ WORKDIR /src/mesos/build
 
 RUN cmake ..
 RUN make -j "$(nproc)"
+
+ENV MESOS_ROOT_DIR=/src/mesos
+ENV MESOS_BUILD_DIR=/src/mesos/build
