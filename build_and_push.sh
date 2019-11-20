@@ -24,7 +24,7 @@ fi
 
 docker build . \
   -f "Dockerfile.${BUILD_TYPE}" \
-  -t "${DOCKER_REPO}:${MESOS_VERSION}" \
+  -t "${DOCKER_REPO}:${MESOS_VERSION}-${BUILD_TYPE}" \
   --build-arg MESOS_VERSION="${MESOS_VERSION}" \
   --build-arg MESOS_GIT="${MESOS_GIT}"
 
