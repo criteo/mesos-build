@@ -1,0 +1,26 @@
+on:
+  schedule:
+    - cron: '0 8 * * *'
+
+name: Autobuild Docker image for criteo fork and push to repository
+jobs:
+  latest-version:
+    name: Build and push new Docker image
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REPO: ${{ matrix.github_repo }}
+      DOCKER_REPO: criteo/mesosbuild
+      BUILD_TYPE: ${{ matrix.build_type }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+      GITHUB_OAUTH_TOKEN: ${{ secrets.GITHUB_OAUTH_TOKEN }}
+    strategy:
+      matrix:
+        build_type: [automake, cmake]
+        github_repo: [apache/mesos, criteo-forks/mesos]
+    steps:
+      - uses: actions/checkout@master
+      - name: Build and push new Docker image
+        run: |
+          ./update_images

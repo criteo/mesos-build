@@ -17,5 +17,15 @@ if [ -z "${DOCKER_REPO}" ]; then
   exit 2
 fi
 
-docker build -t "${DOCKER_REPO}":"${MESOS_VERSION}" --build-arg MESOS_VERSION="${MESOS_VERSION}" --build-arg MESOS_GIT="${MESOS_GIT}" .
-docker push "${DOCKER_REPO}":"${MESOS_VERSION}"
+if [ -z "${BUILD_TYPE}" ]; then
+  echo BUILD_TYPE must be defined
+  exit 2
+fi
+
+docker build . \
+  -f "Dockerfile.${BUILD_TYPE}" \
+  -t "${DOCKER_REPO}:${MESOS_VERSION}" \
+  --build-arg MESOS_VERSION="${MESOS_VERSION}" \
+  --build-arg MESOS_GIT="${MESOS_GIT}"
+
+docker push "${DOCKER_REPO}:${MESOS_VERSION}-${BUILD_TYPE}"

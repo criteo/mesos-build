@@ -3,16 +3,25 @@ FROM centos:7.6.1810
 RUN yum -y install epel-release
 RUN yum -y install \
   apr-devel \
+  automake \
   cmake3 \
   curl-devel \
   cyrus-sasl-devel \
+  cyrus-sasl-md5 \
   gcc-c++ \
   git \
+  libblkid-devel \
+  libevent-devel \
+  libnl3-devel \
+  libtool \
   make \
+  maven \
   mlocate \
+  openssl-devel \
   patch \
   subversion-devel \
   vim \
+  xfsprogs-devel \
   zlib-devel
 
 RUN alternatives \
@@ -27,8 +36,20 @@ ARG MESOS_VERSION=1.8.1
 
 RUN git clone --recursive ${MESOS_GIT} /src/mesos --branch ${MESOS_VERSION}
 
-RUN mkdir /src/mesos/build
-WORKDIR /src/mesos/build
+WORKDIR /src/mesos
 
-RUN cmake ..
-RUN make
+RUN autoreconf --install -Wall --verbose
+
+RUN ./configure \
+     CFLAGS="-Wno-deprecated-declarations" \
+     CXXFLAGS="-Wno-deprecated-declarations" \
+     --disable-silent-rules \
+     --disable-python \
+     --disable-python-dependency-install \
+     --enable-libevent \
+     --enable-ssl \
+     --enable-optimize \
+     --with-network-isolator \
+     --enable-xfs-disk-isolator
+
+RUN make -j "$(nproc)"
