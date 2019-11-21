@@ -23,4 +23,4 @@ jobs:
       - uses: actions/checkout@master
       - name: Build and push new Docker image
         run: |
-          ./update_images
+          ./update_images.sh
