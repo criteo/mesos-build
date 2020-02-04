@@ -25,7 +25,10 @@ RUN alternatives \
 ARG MESOS_GIT=https://github.com/apache/mesos.git
 ARG MESOS_VERSION=1.8.1
 
-RUN git clone --recursive ${MESOS_GIT} /src/mesos --branch ${MESOS_VERSION}
+RUN git clone --recursive ${MESOS_GIT} /src/mesos
+
+WORKDIR /src/mesos
+RUN git checkout ${MESOS_VERSION}
 
 RUN mkdir /src/mesos/build
 WORKDIR /src/mesos/build
