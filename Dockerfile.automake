@@ -42,6 +42,8 @@ RUN git checkout ${MESOS_VERSION}
 
 RUN autoreconf --install -Wall --verbose
 
+ARG CONFIGURE_EXTRA_FLAGS
+
 RUN ./configure \
      CFLAGS="-Wno-deprecated-declarations" \
      CXXFLAGS="-Wno-deprecated-declarations" \
@@ -52,7 +54,8 @@ RUN ./configure \
      --enable-ssl \
      --enable-optimize \
      --with-network-isolator \
-     --enable-xfs-disk-isolator
+     --enable-xfs-disk-isolator \
+     ${CONFIGURE_EXTRA_FLAGS}
 
 RUN make -j "$(nproc)"
 
