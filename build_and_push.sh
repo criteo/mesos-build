@@ -22,10 +22,16 @@ if [ -z "${BUILD_TYPE}" ]; then
   exit 2
 fi
 
-docker build . \
+clone_dir=$(mktemp -d)
+
+git clone "${MESOS_GIT}" "${clone_dir}"
+
+cd "${clone_dir}"
+
+git checkout "${MESOS_VERSION}"
+
+docker build "${clone_dir}" \
   -f "Dockerfile.${BUILD_TYPE}" \
-  -t "${DOCKER_REPO}:${MESOS_VERSION}-${BUILD_TYPE}" \
-  --build-arg MESOS_VERSION="${MESOS_VERSION}" \
-  --build-arg MESOS_GIT="${MESOS_GIT}"
+  -t "${DOCKER_REPO}:${MESOS_VERSION}-${BUILD_TYPE}"
 
 docker push "${DOCKER_REPO}:${MESOS_VERSION}-${BUILD_TYPE}"

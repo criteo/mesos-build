@@ -31,14 +31,9 @@ RUN alternatives \
   --slave /usr/local/bin/ccmake ccmake /usr/bin/ccmake3 \
   --family cmake
 
-ARG MESOS_GIT=https://github.com/apache/mesos.git
-ARG MESOS_VERSION=1.8.1
-
-RUN git clone --recursive ${MESOS_GIT} /src/mesos
+COPY . /src/mesos
 
 WORKDIR /src/mesos
-
-RUN git checkout ${MESOS_VERSION}
 
 RUN autoreconf --install -Wall --verbose
 
