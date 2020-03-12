@@ -1,4 +1,5 @@
-FROM centos:7.6.1810
+# First stage: Builder (version independent)
+FROM centos:7.6.1810 AS builder
 
 RUN yum -y install epel-release
 RUN yum -y install \
@@ -31,13 +32,31 @@ RUN alternatives \
   --slave /usr/local/bin/ccmake ccmake /usr/bin/ccmake3 \
   --family cmake
 
-COPY . /src/mesos
-
+VOLUME [ "/src/mesos" ]
 WORKDIR /src/mesos
 
-RUN autoreconf --install -Wall --verbose
-
 ARG CONFIGURE_EXTRA_FLAGS
+
+CMD autoreconf --install -Wall --verbose && \
+  ./configure \
+     CFLAGS="-Wno-deprecated-declarations" \
+     CXXFLAGS="-Wno-deprecated-declarations" \
+     --disable-silent-rules \
+     --disable-python \
+     --disable-python-dependency-install \
+     --enable-libevent \
+     --enable-ssl \
+     --enable-optimize \
+     --with-network-isolator \
+     --enable-xfs-disk-isolator \
+     ${CONFIGURE_EXTRA_FLAGS} && \
+  make -j "$(nproc)"
+
+# Second stage: Building (version specific)
+FROM builder
+
+COPY . /src/mesos
+RUN autoreconf --install -Wall --verbose
 
 RUN ./configure \
      CFLAGS="-Wno-deprecated-declarations" \
