@@ -32,7 +32,6 @@ RUN alternatives \
   --slave /usr/local/bin/ccmake ccmake /usr/bin/ccmake3 \
   --family cmake
 
-VOLUME [ "/src/mesos" ]
 WORKDIR /src/mesos
 
 ARG CONFIGURE_EXTRA_FLAGS
