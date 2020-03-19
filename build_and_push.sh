@@ -26,9 +26,7 @@ clone_dir=$(mktemp -d)
 
 git clone "${MESOS_GIT}" "${clone_dir}"
 
-cd "${clone_dir}"
-
-git checkout "${MESOS_VERSION}"
+git -C "${clone_dir}" checkout "${MESOS_VERSION}"
 
 docker build "${clone_dir}" \
   -f "Dockerfile.${BUILD_TYPE}" \
