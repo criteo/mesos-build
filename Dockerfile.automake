@@ -15,6 +15,7 @@ RUN yum -y install \
   libevent-devel \
   libnl3-devel \
   libtool \
+  libseccomp-devel \
   make \
   maven \
   mlocate \
@@ -46,6 +47,7 @@ CMD autoreconf --install -Wall --verbose && \
      --enable-libevent \
      --enable-ssl \
      --enable-optimize \
+     --enable-seccomp-isolator \
      --with-network-isolator \
      --enable-xfs-disk-isolator \
      ${CONFIGURE_EXTRA_FLAGS} && \
@@ -67,6 +69,7 @@ RUN ./configure \
      --enable-libevent \
      --enable-ssl \
      --enable-optimize \
+     --enable-seccomp-isolator \
      --with-network-isolator \
      --enable-xfs-disk-isolator \
      ${CONFIGURE_EXTRA_FLAGS}
