@@ -4,7 +4,7 @@ version: '2'
 x-mesos-slave:
   &mesos-slave
   extends:
-    file: resources/slave.yml
+    file: resources/mesos.yml
     service: mesos-slave
   depends_on:
     - zookeeper
@@ -12,8 +12,6 @@ x-mesos-slave:
   links:
     - zookeeper:zookeeper
     - mesos-master:master.mesos
-  volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
 
 services:
   zookeeper:
@@ -26,7 +24,11 @@ services:
         ipv4_address: 172.16.190.2
 
   mesos-master:
-    image: mesosphere/mesos-master:1.7.1
+    build:
+      context: ${MESOS_SOURCES}
+      dockerfile: $PWD/Dockerfile.automake
+    image: criteo/mesosbuild
+    command: /usr/bin/mesos-master
     hostname: localhost
     ports:
       - "5050:5050"
@@ -39,15 +41,16 @@ services:
       - zookeeper
     environment:
       MESOS_ZK: zk://zookeeper:2181/mesos
-      MESOS_QUORUM: 1
       MESOS_CLUSTER: docker-compose
       MESOS_HOSTNAME: localhost
       MESOS_WORK_DIR: /var/tmp/mesos
       MESOS_LOG_DIR: /var/log/mesos
       LIBPROCESS_IP: 172.16.190.3
+    volumes:
+      - ${MESOS_SOURCES}:/src/mesos/
 
   marathon-service:
-    image: mesosphere/marathon:v1.6.587
+    image: mesosphere/marathon:v1.10.17
     ports:
       - "8080:8080"
     hostname: localhost

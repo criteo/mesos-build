@@ -23,6 +23,7 @@ RUN yum -y install \
   patch \
   subversion-devel \
   vim \
+  docker \
   xfsprogs-devel \
   zlib-devel
 
@@ -78,3 +79,10 @@ RUN make -j "$(nproc)"
 
 ENV MESOS_ROOT_DIR=/src/mesos
 ENV MESOS_BUILD_DIR=/src/mesos
+
+RUN echo -e "#!/bin/sh\n\n/src/mesos/src/mesos-agent --master=\$MESOS_MASTER --port=\$MESOS_PORT --hostname=\$MESOS_HOSTNAME --work_dir=\$MESOS_WORK_DIR --log_dir=\$MESOS_LOG_DIR --containerizers=\$MESOS_CONTAINERIZERS --resources=\$MESOS_RESOURCES --no-systemd_enable_support --launcher_dir=\$MESOS_EXEC_DIR --image_providers=docker --isolation=\$MESOS_ISOLATION" > /usr/bin/mesos-agent
+
+RUN echo -e "#!/bin/sh\n/src/mesos/src/mesos-master --zk=\$MESOS_ZK --quorum=1 --cluster=\$MESOS_CLUSTER --hostname=\$MESOS_HOSTNAME --work_dir=\$MESOS_WORK_DIR --log_dir=\$MESOS_LOG_DIR" > /usr/bin/mesos-master
+
+RUN chmod 0755 /usr/bin/mesos-master
+RUN chmod 0755 /usr/bin/mesos-agent
