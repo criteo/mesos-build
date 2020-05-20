@@ -1,7 +1,10 @@
 ## SETUP
 1. `echo "MESOS_SOURCES=/home/user/mesos-upstream/" > .env`
-2. `docker-compose build`
-3. `docker-compose up`
+2. `docker build -f Dockerfile.automake --target builder -t builder-mesos .`
+2. Then, from MESOS_SOURCES dir: `docker run -v $(pwd):/src/mesos builder-mesos`
+3. Go back in mesosbuild and `docker-compose up`
+
+After each source modification, just kill docker-compose, rebuild and `docker-compose up`
 
 
 ## TODO

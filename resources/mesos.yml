@@ -3,7 +3,7 @@ version: '2'
 
 services:
   mesos-slave:
-    image: criteo/mesosbuild
+    image: builder-mesos
     command: /usr/bin/mesos-agent
     privileged: true
     environment:

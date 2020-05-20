@@ -24,10 +24,7 @@ services:
         ipv4_address: 172.16.190.2
 
   mesos-master:
-    build:
-      context: ${MESOS_SOURCES}
-      dockerfile: $PWD/Dockerfile.automake
-    image: criteo/mesosbuild
+    image: builder-mesos
     command: /usr/bin/mesos-master
     hostname: localhost
     ports:
