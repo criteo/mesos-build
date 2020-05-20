@@ -24,7 +24,7 @@ services:
         ipv4_address: 172.16.190.2
 
   mesos-master:
-    image: builder-mesos
+    image: runner-mesos
     command: /usr/bin/mesos-master
     hostname: localhost
     ports:

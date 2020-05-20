@@ -23,7 +23,6 @@ RUN yum -y install \
   patch \
   subversion-devel \
   vim \
-  docker \
   xfsprogs-devel \
   zlib-devel
 
@@ -35,12 +34,6 @@ RUN alternatives \
   --family cmake
 
 WORKDIR /src/mesos
-
-RUN echo -e "#!/bin/sh\n\nexport LD_LIBRARY_PATH=/src/mesos/src/.libs\n/src/mesos/src/.libs/mesos-agent --master=\$MESOS_MASTER --port=\$MESOS_PORT --hostname=\$MESOS_HOSTNAME --work_dir=\$MESOS_WORK_DIR --log_dir=\$MESOS_LOG_DIR --containerizers=\$MESOS_CONTAINERIZERS --resources=\$MESOS_RESOURCES --no-systemd_enable_support --launcher_dir=\$MESOS_EXEC_DIR --image_providers=docker --isolation=\$MESOS_ISOLATION" > /usr/bin/mesos-agent
-RUN echo -e "#!/bin/sh\n/src/mesos/src/mesos-master --zk=\$MESOS_ZK --quorum=1 --cluster=\$MESOS_CLUSTER --hostname=\$MESOS_HOSTNAME --work_dir=\$MESOS_WORK_DIR --log_dir=\$MESOS_LOG_DIR" > /usr/bin/mesos-master
-
-RUN chmod 0755 /usr/bin/mesos-master
-RUN chmod 0755 /usr/bin/mesos-agent
 
 ARG CONFIGURE_EXTRA_FLAGS
 
@@ -59,6 +52,16 @@ CMD autoreconf --install -Wall --verbose && \
      --enable-xfs-disk-isolator \
      ${CONFIGURE_EXTRA_FLAGS} && \
   make -j "$(nproc)"
+
+FROM builder AS runner
+
+RUN echo -e "#!/bin/sh\n\nexport LD_LIBRARY_PATH=/src/mesos/src/.libs\n/src/mesos/src/.libs/mesos-agent --master=\$MESOS_MASTER --port=\$MESOS_PORT --hostname=\$MESOS_HOSTNAME --work_dir=\$MESOS_WORK_DIR --log_dir=\$MESOS_LOG_DIR --containerizers=\$MESOS_CONTAINERIZERS --resources=\$MESOS_RESOURCES --no-systemd_enable_support --launcher_dir=\$MESOS_EXEC_DIR --image_providers=docker --isolation=\$MESOS_ISOLATION" > /usr/bin/mesos-agent
+RUN echo -e "#!/bin/sh\n/src/mesos/src/mesos-master --zk=\$MESOS_ZK --quorum=1 --cluster=\$MESOS_CLUSTER --hostname=\$MESOS_HOSTNAME --work_dir=\$MESOS_WORK_DIR --log_dir=\$MESOS_LOG_DIR" > /usr/bin/mesos-master
+
+RUN chmod 0755 /usr/bin/mesos-master
+RUN chmod 0755 /usr/bin/mesos-agent
+
+CMD /usr/bin/mesos-agent
 
 # Second stage: Building (version specific)
 FROM builder
