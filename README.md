@@ -13,4 +13,3 @@ After each source modification, just kill docker-compose, rebuild and `docker-co
  - [ ] Make a marathon image based on centos to leverage freshly built libmesos
    and Criteo's marathon-ui.
  - [ ] Fix sandbox mesos sandbox access
- - [ ] putting scripts outside Dockerfile
