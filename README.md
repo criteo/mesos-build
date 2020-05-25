@@ -12,4 +12,3 @@ After each source modification, just kill docker-compose, rebuild and `docker-co
    generate the docker-compose with a template engine
  - [ ] Make a marathon image based on centos to leverage freshly built libmesos
    and Criteo's marathon-ui.
- - [ ] Fix sandbox mesos sandbox access

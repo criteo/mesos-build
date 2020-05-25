@@ -13,5 +13,6 @@ services:
       MESOS_LOG_DIR: /var/log/mesos
       MESOS_ISOLATION: filesystem/linux,docker/runtime
       MESOS_EXEC_DIR: /src/mesos/src/
+      MESOS_HOSTNAME: localhost
     volumes:
       - ${MESOS_SOURCES}:/src/mesos/

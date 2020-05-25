@@ -67,12 +67,11 @@ services:
 
   mesos-slave-1:
     << : *mesos-slave
-    hostname: mesos-slave-1
+    hostname: localhost
     ports:
       - "5051:5051"
     environment:
       MESOS_PORT: 5051
-      MESOS_HOSTNAME: mesos-slave-1
       LIBPROCESS_IP: 172.16.190.10
     networks:
       app_net:
@@ -80,12 +79,11 @@ services:
 
   mesos-slave-2:
     << : *mesos-slave
-    hostname: mesos-slave-2
+    hostname: localhost
     ports:
       - "5052:5052"
     environment:
       MESOS_PORT: 5052
-      MESOS_HOSTNAME: mesos-slave-2
       LIBPROCESS_IP: 172.16.190.11
     networks:
       app_net:
@@ -93,12 +91,11 @@ services:
 
   mesos-slave-3:
     << : *mesos-slave
-    hostname: mesos-slave-3
+    hostname: localhost
     ports:
       - "5053:5053"
     environment:
       MESOS_PORT: 5053
-      MESOS_HOSTNAME: mesos-slave-3
       LIBPROCESS_IP: 172.16.190.12
     networks:
       app_net:
@@ -106,12 +103,11 @@ services:
 
   mesos-slave-4:
     << : *mesos-slave
-    hostname: mesos-slave-4
+    hostname: localhost
     ports:
       - "5054:5054"
     environment:
       MESOS_PORT: 5054
-      MESOS_HOSTNAME: mesos-slave-4
       LIBPROCESS_IP: 172.16.190.13
     networks:
       app_net:
@@ -119,12 +115,11 @@ services:
 
   mesos-slave-5:
     << : *mesos-slave
-    hostname: mesos-slave-5
+    hostname: localhost
     ports:
       - "5055:5055"
     environment:
       MESOS_PORT: 5055
-      MESOS_HOSTNAME: mesos-slave-5
       LIBPROCESS_IP: 172.16.190.14
     networks:
       app_net:
