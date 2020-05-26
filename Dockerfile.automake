@@ -53,6 +53,16 @@ CMD autoreconf --install -Wall --verbose && \
      ${CONFIGURE_EXTRA_FLAGS} && \
   make -j "$(nproc)"
 
+FROM builder AS runner
+
+COPY resources/mesos-agent /usr/bin/mesos-agent
+COPY resources/mesos-master /usr/bin/mesos-master
+
+RUN chmod 0755 /usr/bin/mesos-master
+RUN chmod 0755 /usr/bin/mesos-agent
+
+CMD /usr/bin/mesos-agent
+
 # Second stage: Building (version specific)
 FROM builder
 
@@ -78,3 +88,4 @@ RUN make -j "$(nproc)"
 
 ENV MESOS_ROOT_DIR=/src/mesos
 ENV MESOS_BUILD_DIR=/src/mesos
+
